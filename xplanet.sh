@@ -39,7 +39,7 @@ then
 	echo " Connected !";
 	echo -n " > Deleting old clouds map.";
 	rm -f $CLOUDS_IMG;
-	echo " Done.";
+	echo " Done !";
 	echo -n " > Downloading clouds map...";
 	wget $URL_CLOUDS -O $CLOUDS_IMG > $NULL 2>&1
 	echo " Done !";
@@ -66,3 +66,4 @@ echo " Done !";
 echo -n " > Setting up background.";
 $NOTIFY_CMD --icon=$NOTIFY_IMG --app-name=$0 "Xplanet: Mise à jour terminée.";
 echo " Done !";
+return 0;
