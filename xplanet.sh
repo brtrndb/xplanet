@@ -32,7 +32,7 @@ echo "Xplanet wallpaper script. (`date "+%H:%M:%S"`).";
 
 if [ "$PLANET" = "earth" ] && [ "$DL_CLOUDS" = "true" ];
 then
-    echo " > Planet Earth needs clouds map.. ";
+    echo " > Planet Earth needs clouds map. ";
     echo -n " > Checking internet connexion.";
     if ping -c 3 google.com > $NULL 2>&1;
     then
