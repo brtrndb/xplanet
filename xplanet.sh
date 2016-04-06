@@ -45,13 +45,13 @@ then
 	echo " Done !";
     else
 	echo " Connection failed.";
-	echo -n " > Old clouds map used instead..";
+	echo -n " > Old clouds map used instead.";
     fi
 else
     echo " > Planet selected: $PLANET." ;
 fi
 
-echo -n " > Deleting old backround images...";
+echo -n " > Deleting old backround images.";
 rm -f $DIR_IMG/bg-*.png;
 echo " Done !";
 
