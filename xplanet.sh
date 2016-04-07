@@ -27,33 +27,50 @@ URL_CLOUDS="http://home.megapass.co.kr/~gitto88/cloud_data/clouds_4096.jpg"
 NOTIFY_CMD=/usr/bin/notify-send
 NULL=/dev/null
 
-echo "Xplanet wallpaper script. (`date "+%H:%M:%S"`).";
+xplanet_usage()
+{
+    echo "Usage: $0 [OPTION]";
+    echo "  -c, --config	Use an xplanet configuration file. Default name: $CONFIG_FILE.";
+    echo "  -p, --planet	Choose a specific planet to render. Default: $PLANET.";
+    echo "  -dl		Download the clouds map. Works only for Earth.";
+    echo "  -bg		Set the rendered image as background.";
+    echo "  -h, --help	Display usage.";
+    return 0;
+}
 
 while [ "$#" -gt "0" ];
 do
     case "$1" in
-	-c | --config)
+	-c | --config)	# Choose a configuration file.
 	    CONFIG_FILE="$2";
 	    shift 2;
 	    ;;
 	-p | --planet)	# Planet.
 	    PLANET="$2";
+	    PLANET_IMG=$DIR_IMG/bg-$PLANET-`date +%s`.png;
 	    shift 2;
 	    ;;
 	-dl)		# Download earth clouds map.
 	    DL_CLOUDS=true;
 	    shift 1;
 	    ;;
-	-bg | --background)
+	-bg | --background)	# Set the image as background.
 	    SET_BACKGROUND=true;
 	    shift 1;
 	    ;;
+	-h | --help)	# Display usage.
+	    xplanet_usage;
+	    return 0;
+	    ;;
 	-* | --*)	# Unknown option found
-	    echo "Unknown option $1."
+	    xplanet_usage;
 	    return 1;
 	    ;;
     esac
 done
+
+
+echo "Xplanet wallpaper script. (`date "+%H:%M:%S"`).";
 
 if [ "$PLANET" = "earth" ] && [ "$DL_CLOUDS" = "true" ];
 then
@@ -91,6 +108,7 @@ echo " Done !";
 if [ "$SET_BACKGROUND" = "true" ];
    then
        echo -n " > Setting up background.";
+       gsettings set org.gnome.desktop.background picture-uri file://"$(readlink -f $PLANET_IMG)";
 fi
 
 $NOTIFY_CMD --icon=$NOTIFY_IMG --app-name=$0 "Xplanet: Mise à jour terminée.";
