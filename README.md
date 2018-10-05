@@ -6,14 +6,15 @@ Simple script using xplanet to generate a nice wallpaper.
 
 First install xplanet.
 
-```
+```sh
 sudo apt-get install xplanet
 ```
 
 ### Usage
 
-```
-./xplanet [OPTIONS]
+```sh
+$ xplanet.sh -h
+Usage: ./xplanet [OPTIONS]
  -c, --config	# Use an xplanet configuration file. Default name: xplanet.config.
  -p, --planet	# Choose a specific planet to render. Default: earth.
  -dl		# Download the clouds map. Works only for Earth.
