@@ -29,3 +29,7 @@ Tested on Ubuntu 15.10.
 ### Links
 
 Xplanet ressources: http://xplanet.sourceforge.net
+
+## License
+
+See [LICENSE.md](./LICENSE.md).
