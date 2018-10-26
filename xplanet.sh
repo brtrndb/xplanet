@@ -20,8 +20,8 @@ STARS_IMG=$DIR_IMG/stars.png
 NOTIFY_IMG=$DIR_IMG/notify.jpg
 
 # Download clouds map urls.
-URL_CLOUDS=http://xplanetclouds.com/free/local/clouds_2048.jpg
-URL_PING=www.google.com
+URL_CLOUDS="http://xplanetclouds.com/free/local/clouds_2048.jpg"
+URL_PING="www.google.com"
 
 NOTIFY_CMD=/usr/bin/notify-send
 NULL=/dev/null
@@ -31,7 +31,7 @@ usage()
     echo "Usage: ./$(basename "$0") [OPTION]";
     echo "-c, --config: Use an xplanet configuration file. Default name: $CONFIG_FILE.";
     echo "-p, --planet: Choose a specific planet to render. Default: $PLANET.";
-    echo "-dl:          Download the clouds map. Works only for Earth.";
+    echo "-dl:          Download the clouds map. Works only for Earth. Note: 2 downloads per day per IP address.";
     echo "-bg:          Set the rendered image as background.";
     echo "-h, --help:   Display usage.";
 }
@@ -71,7 +71,7 @@ configure(){
 dl_clouds(){
     echo "Planet Earth requires clouds map.";
     echo -n "Checking internet connexion...";
-    CONNECTED=`ping -c 1 $URL_PING && echo $?`;
+    CONNECTED=`ping -c 1 $URL_PING > $NULL 2>&1 && echo $?`;
     if [ ! "0" -eq "$CONNECTED" ] ; then
 	echo " There is no internet connection.";
 	echo "Old clouds map will be used.";
@@ -79,14 +79,23 @@ dl_clouds(){
     fi
 
     echo " Success.";
-    echo -n "Deleting old clouds map.";
-    rm -f $CLOUDS_IMG;
-    echo " Done.";
+    mv $CLOUDS_IMG $CLOUDS_IMG.old;
     echo "Downloading clouds map.";
-    wget -q $URL_CLOUDS -O $CLOUDS_IMG --show-progress --progress=bar:scroll 2>&1 ;
+    wget $URL_CLOUDS -O $CLOUDS_IMG -q --show-progress --progress=bar:scroll ;
+
+    if [ "`file -b $CLOUDS_IMG`" = "ASCII text" ] ; then
+      cat $CLOUDS_IMG;
+      rm -f $CLOUDS_IMG;
+      mv $CLOUDS_IMG.old $CLOUDS_IMG;
+      echo "Using old clouds map.";
+    else
+      echo -n "Deleting old clouds map.";
+      rm -f $CLOUDS_IMG.old;
+      echo " Done.";
+    fi
 }
 
-delete_previous(){
+rm_previous_render(){
     echo -n "Deleting old backround images.";
     rm -f $DIR_IMG/bg-*.png;
     echo " Done.";
@@ -119,7 +128,7 @@ run(){
     if [ "$PLANET" = "earth" ] && [ "$DL_CLOUDS" = "true" ] ; then
 	dl_clouds;
     fi
-    delete_previous;
+    rm_previous_render;
     render;
     set_background;
     notify;
