@@ -24,13 +24,12 @@ Usage: ./xplanet [OPTIONS]
 
 ### Links
 
-Xplanet ressources: http://xplanet.sourceforge.net
-Xplanet clouds: http://xplanetclouds.com/
+- Xplanet ressources: http://xplanet.sourceforge.net
+- Xplanet clouds: http://xplanetclouds.com/
 
 ### Note
 
 Tested on Ubuntu 18.04.
-
 
 ## License
 
