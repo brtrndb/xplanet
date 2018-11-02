@@ -147,7 +147,7 @@ notify() {
 
 setup_cron() {
     CRONTAB=`crontab -u $USER -l 2> $NULL | grep -v $(basename $0)`;
-    CONF="0 * * * * $(readlink -f $0) -f `readlink -f $PARAM_CONFIG_FILE` -bg -dl -rm -t /tmp";
+    CONF="0 * * * * `readlink -f $0` -f `readlink -f $PARAM_CONFIG_FILE` -bg -dl -rm -t $PARAM_TARGET_DIR";
 
     if [ -z "$CRONTAB" ]; then
 	echo -e "$CONF" | crontab -u $USER -;
@@ -174,9 +174,9 @@ do_xplanet() {
 run() {
     configure $*;
     if [ "$PARAM_CRON" = "true" ]; then
-      setup_cron;
+	setup_cron;
     else
-      do_xplanet;
+	do_xplanet;
     fi
 }
 

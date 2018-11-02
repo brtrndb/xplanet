@@ -2,32 +2,43 @@
 
 Simple script using xplanet to generate a nice wallpaper.
 
-### Requirements
+## Installation
 
-First install xplanet.
+First, clone the repository.
+
+```sh
+$ git clone https://github.com/brtrndb/xplanet.git
+```
+
+## Requirements
+
+Then install xplanet.
 
 ```sh
 $ sudo apt-get install xplanet
 ```
 
-### Usage
+## Usage
 
 ```sh
 $ ./xplanet.sh -h
-Usage: ./xplanet [OPTIONS]
--c, --config: Use an xplanet configuration file. Default name: ./xplanet.config.
--p, --planet: Choose a specific planet to render. Default: earth.
--dl:          Download the clouds map. Works only for Earth. Note: 2 downloads per day per IP address.
--bg:          Set the rendered image as background.
--h, --help:   Display usage.
+Usage: ./xplanet.sh [OPTION]
+-f, --file:        Use an xplanet configuration file. Default name: ./xplanet.config.
+-t, --target:      Set the directory for generated images. Default: ./img.
+-p, --planet:      Choose a specific planet to render. Default: earth.
+-c, --cron:        Add a crontab entry every hour.
+-dl, --download:   Download the clouds map. Works only for Earth.
+-bg, --background: Set the rendered image as background.
+-rm, --remove:     Delete previous images.
+-h, --help:        Display usage.
 ```
 
-### Links
+## Links
 
 - Xplanet ressources: http://xplanet.sourceforge.net
 - Xplanet clouds: http://xplanetclouds.com/
 
-### Note
+## Note
 
 Tested on Ubuntu 18.04.
 
