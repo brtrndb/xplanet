@@ -131,7 +131,17 @@ render() {
 	OPT_LABEL="-label -color $LABEL_COLOR -labelpos $LABEL_POS -fontsize 25";
     fi
     echo -n "Generating image. This may take a while...";
-    xplanet -num_times 1 -config $PARAM_CONFIG_FILE -searchdir $FOLDER_IMG -body $PARAM_PLANET -longitude $COORD_LONG -latitude $COORD_LAT -background $IMG_STARS -geometry $GEOMETRY -quality 100 $OPT_LABEL -output $IMG_PLANET > $NULL 2>&1;
+    xplanet -num_times 1 \
+      -config $PARAM_CONFIG_FILE \
+      -searchdir $FOLDER_IMG \
+      -body $PARAM_PLANET \
+      -longitude $COORD_LONG \
+      -latitude $COORD_LAT \
+      -background $IMG_STARS \
+      $OPT_LABEL \
+      -geometry $GEOMETRY \
+      -quality 100 \
+      -output $IMG_PLANET > $NULL 2>&1;
     echo " Done !";
 }
 
