@@ -2,8 +2,8 @@
 # Bertrand B.
 
 # Script parameters.
-PARAM_CONFIG_FILE="$(dirname $0)/xplanet.config";
-PARAM_TARGET_DIR="$(dirname $0)/img";
+PARAM_CONFIG_FILE="$(dirname "$0")/xplanet.config";
+PARAM_TARGET_DIR="$(dirname "$0")/img";
 PARAM_PLANET=earth;
 PARAM_CRON=false;
 PARAM_CLOUDS=false;
@@ -14,17 +14,16 @@ PARAM_LABEL=false;
 # Xplanet options.
 COORD_LONG=0;			# Default longitude.
 COORD_LAT=0;			# Default latitude.
-LABEL=false;			# Label on image.
 LABEL_COLOR=blue;		# Deafult label text color.
 LABEL_POS=+0+0;			# Default label position.
 GEOMETRY=4096x2048;		# Default image size.
 
 # Images.
-FOLDER_IMG="$(dirname $0)/img";
-IMG_PLANET="$PARAM_TARGET_DIR/bg-$PARAM_PLANET-`date +%s`.png";
+FOLDER_IMG="$(dirname "$0")/img";
+IMG_PLANET="$PARAM_TARGET_DIR/bg-$PARAM_PLANET-$(date +%s).png";
 IMG_CLOUDS="$FOLDER_IMG/earth-clouds.jpg";
 IMG_STARS="$FOLDER_IMG/stars.png";
-IMG_NOTIFY=$"FOLDER_IMG/notify.jpg";
+IMG_NOTIFY="$FOLDER_IMG/notify.jpg";
 
 # Download clouds map urls.
 URL_CLOUDS="https://raw.githubusercontent.com/apollo-ng/cloudmap/master/global.jpg";
@@ -34,8 +33,8 @@ NOTIFY_CMD="/usr/bin/notify-send";
 NULL="/dev/null";
 
 # Used for setting background.
-PID=`pgrep gnome-session -n`;
-export DBUS_SESSION_BUS_ADDRESS=`grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ | cut -d= -f2-`;
+PID=$(pgrep gnome-session -n);
+export DBUS_SESSION_BUS_ADDRESS=$(grep -z DBUS_SESSION_BUS_ADDRESS /proc/$PID/environ | cut -d= -f2-);
 
 usage() {
   echo "Usage: ./$(basename "$0") [OPTION]";
@@ -58,12 +57,12 @@ configure() {
         ;;
       -t | --target)
         PARAM_TARGET_DIR="$2";
-        IMG_PLANET=$PARAM_TARGET_DIR/bg-$PARAM_PLANET-`date +%s`.png;
+        IMG_PLANET="$PARAM_TARGET_DIR/bg-$PARAM_PLANET-$(date +%s).png";
         shift 2;
         ;;
       -p | --planet)
         PARAM_PLANET="$2";
-        IMG_PLANET=$PARAM_TARGET_DIR/bg-$PARAM_PLANET-`date +%s`.png;
+        IMG_PLANET="$PARAM_TARGET_DIR/bg-$PARAM_PLANET-$(date +%s).png";
         shift 2;
         ;;
       -c | --cron)
@@ -86,7 +85,7 @@ configure() {
         usage;
         exit 0;
         ;;
-      -* | --*)
+      --* | -*)
         echo "Unknown parameter $1. Ignored.";
         shift 1;
         ;;
@@ -96,11 +95,11 @@ configure() {
 
 mk_folder() {
   if [ "$PARAM_TARGET_DIR" = "." ]; then
-    PARAM_TARGET_DIR=`pwd`;
+    PARAM_TARGET_DIR=$(pwd);
   fi
 
   if [ ! -d "$PARAM_TARGET_DIR" ]; then
-    mkdir -vp $PARAM_TARGET_DIR;
+    mkdir -vp "$PARAM_TARGET_DIR";
   fi
 }
 
@@ -110,7 +109,7 @@ dl_clouds() {
   fi
 
   echo -n "Clouds map required.";
-  CONNECTED=`ping -c 1 $URL_PING > $NULL 2>&1 && echo $?`;
+  CONNECTED=$(ping -c 1 $URL_PING > $NULL 2>&1 && echo $?);
   if [ ! "0" -eq "$CONNECTED" ] ; then
     echo " No internet connection. Old clouds map will be used.";
     return;
@@ -147,7 +146,7 @@ render() {
 
 set_background() {
   if [ "$PARAM_BACKGROUND" = "true" ]; then
-    gsettings set org.gnome.desktop.background picture-uri "file://`readlink -f $IMG_PLANET`";
+    gsettings set org.gnome.desktop.background picture-uri "file://$(readlink -f "$IMG_PLANET")";
   fi
 }
 
@@ -156,8 +155,8 @@ notify() {
 }
 
 setup_cron() {
-  CRONTAB=`crontab -u $USER -l 2> $NULL | grep -v $(basename $0)`;
-  CONF="0 * * * * `readlink -f $0` -f `readlink -f $PARAM_CONFIG_FILE` -bg -dl -rm -t $PARAM_TARGET_DIR";
+  CRONTAB=$(crontab -u $USER -l 2> $NULL | grep -v $(basename "$0"));
+  CONF="0 * * * * $(readlink -f "$0") -f $(readlink -f "$PARAM_CONFIG_FILE") -bg -dl -rm -t $PARAM_TARGET_DIR";
 
   if [ -z "$CRONTAB" ]; then
     echo -e "$CONF" | crontab -u $USER -;
