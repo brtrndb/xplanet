@@ -121,7 +121,8 @@ dl_clouds() {
 
 rm_previous_render() {
   if [ "$PARAM_REMOVE" = "true" ]; then
-    rm -vf $PARAM_TARGET_DIR/bg-$PARAM_PLANET*.png;
+    LATEST_BACKGROUND=$(ls -t $PARAM_TARGET_DIR/bg-$PARAM_PLANET*.png | head -2 | tail -1)
+    rm -vf $LATEST_BACKGROUND;
   fi
 }
 
@@ -174,8 +175,8 @@ do_xplanet() {
   echo "Planet selected: $PARAM_PLANET." ;
   mk_folder;
   dl_clouds;
-  rm_previous_render;
   render;
+  rm_previous_render;
   set_background;
   notify;
 }
